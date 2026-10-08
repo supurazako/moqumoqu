@@ -6,9 +6,9 @@ This project is being developed to understand MOQT through implementing its wire
 
 ## Status
 
-This implementation is incomplete and is not intended for production use.
+This implementation is incomplete and is not intended for production use. The target is `draft-ietf-moq-transport-22`, but the current protocol code originated as a draft-19 prototype and has not yet been reviewed for draft-22 conformance.
 
-The current code was initially written while studying `draft-ietf-moq-transport-19`. It will be updated to a newer draft before implementing transport communication and interoperability.
+The current code contains initial wire-format primitives for variable-length integers, key-value pairs, and SETUP, plus Request ID allocation and validation. Most control messages, data framing, session state, and QUIC/WebTransport communication are not implemented yet.
 
 ## Testing
 
