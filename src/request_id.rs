@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EndpointRole {
     Client,
@@ -32,16 +34,23 @@ pub enum RequestIdValidationError {
         request_id: u64,
         sender: EndpointRole,
     },
+    Duplicate {
+        request_id: u64,
+    },
 }
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct RequestIdValidator {
     sender: EndpointRole,
+    seen: HashSet<u64>,
 }
 
 impl RequestIdValidator {
     pub fn new(sender: EndpointRole) -> Self {
-        Self { sender }
+        Self {
+            sender,
+            seen: HashSet::new(),
+        }
     }
 
     pub fn validate(&mut self, request_id: u64) -> Result<(), RequestIdValidationError> {
@@ -55,6 +64,10 @@ impl RequestIdValidator {
                 request_id,
                 sender: self.sender,
             });
+        }
+
+        if !self.seen.insert(request_id) {
+            return Err(RequestIdValidationError::Duplicate { request_id });
         }
 
         Ok(())
